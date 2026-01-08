@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Block Breaker Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div id="star-container"></div>
+    <div class="game-container">
+        <h1>もっち the Cat</h1>
+        <div class="canvas-wrapper">
+            <canvas id="gameCanvas" width="480" height="320"></canvas>
+            <div id="gameOverlay" class="overlay hidden">
+                <div class="overlay-content">
+                    <h2 id="overlayTitle">Game Over</h2>
+                    <p id="overlayScore">Score: 0</p>
+                    <button id="restartButton">Restart</button>
+                </div>
+            </div>
+        </div>
+        <p>左右の矢印キーで操作してください</p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

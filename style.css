@@ -1,0 +1,231 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+    background-size: 400% 400%;
+    animation: gradientMove 15s ease infinite;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+    color: white;
+    /* Text color adjustment for dark background */
+}
+
+@keyframes gradientMove {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.game-container {
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+h1 {
+    margin-bottom: 10px;
+    color: #ff6b6b;
+    /* Pop pinkish-red */
+    font-family: 'Comic Sans MS', 'Chalkboard SE', 'Arial Rounded MT Bold', sans-serif;
+    text-shadow: 2px 2px 0px #ffffff, 4px 4px 0px #ffd9d9;
+    font-size: 32px;
+    letter-spacing: 1px;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+        transform: translateY(0);
+    }
+
+    40% {
+        transform: translateY(-5px);
+    }
+
+    60% {
+        transform: translateY(-3px);
+    }
+}
+
+canvas {
+    background: rgba(0, 0, 0, 0.2);
+    /* Semi-transparent dark */
+    display: block;
+    margin: 0 auto;
+    border-radius: 4px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    /* Stronger shadow */
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    /* Subtle border */
+}
+
+.canvas-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+canvas {
+    background: rgba(0, 0, 0, 0.2);
+    display: block;
+    margin: 0 auto;
+    border-radius: 4px;
+    width: 100%;
+    /* Responsive width */
+    height: auto;
+    /* Maintain aspect ratio */
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+/* ... existing overlay styles ... */
+
+button#restartButton {
+    background-color: #0095DD;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    /* Larger touch target */
+    font-size: 18px;
+    /* Larger text */
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    touch-action: manipulation;
+    /* Optimize for touch */
+}
+
+.overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.overlay-content {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.overlay-content h2 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.overlay-content p {
+    color: #666;
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+button#restartButton {
+    background-color: #0095DD;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+button#restartButton:hover {
+    background-color: #007bb5;
+}
+
+p {
+    margin-top: 10px;
+    color: #555;
+    font-size: 14px;
+}
+
+/* Star Styles */
+#star-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.8;
+    animation: twinkle 3s infinite alternate;
+}
+
+.star.yellow {
+    background: #ffd700;
+    /* Gold/Yellow */
+    box-shadow: 0 0 4px #ffd700;
+}
+
+@keyframes twinkle {
+    0% {
+        opacity: 0.3;
+        transform: scale(0.8);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+}
