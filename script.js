@@ -46,7 +46,7 @@ let powerUps = [];
 
 // Ball properties
 const ballRadius = 6;
-const initialSpeed = 4; // Keep the faster speed requested
+const initialSpeed = 2.5; // Slower speed as requested
 
 function createBall(x, y, dx, dy) {
     return { x: x, y: y, dx: dx, dy: dy, history: [] }; // Add history array
@@ -57,6 +57,8 @@ function initGame() {
     powerUps = [];
     score = 0;
     isGameOver = false;
+    gameWon = false;
+    fireworks = [];
     paddleWidth = basePaddleWidth;
     shakeDuration = 0;
 
@@ -108,20 +110,28 @@ if (restartButton) {
     });
 }
 
-// Touch support for canvas
-canvas.addEventListener("touchstart", touchHandler, { passive: false });
-canvas.addEventListener("touchmove", touchHandler, { passive: false });
+// Touch support for canvas (Global)
+document.addEventListener("touchstart", touchHandler, { passive: false });
+document.addEventListener("touchmove", touchHandler, { passive: false });
 
 function touchHandler(e) {
-    e.preventDefault();
+    if (e.target.tagName !== "BUTTON") {
+        e.preventDefault();
+    }
     const rect = canvas.getBoundingClientRect();
     const scaleX = canvas.width / rect.width;
     let touchX = e.touches[0].clientX - rect.left;
     touchX *= scaleX;
 
-    if (touchX > 0 && touchX < canvas.width) {
-        paddleX = touchX - paddleWidth / 2;
-    }
+    // Clamp touchX to be within canvas bounds
+    if (touchX < 0) touchX = 0;
+    if (touchX > canvas.width) touchX = canvas.width;
+
+    paddleX = touchX - paddleWidth / 2;
+
+    // Clamp paddleX to keep paddle within screen
+    if (paddleX < 0) paddleX = 0;
+    if (paddleX + paddleWidth > canvas.width) paddleX = canvas.width - paddleWidth;
 }
 
 paddleImg.onload = function () {
@@ -210,6 +220,11 @@ function showGameOver(isWin) {
     title.style.color = isWin ? "#4CAF50" : "#ff4444";
     if (scoreSpan) scoreSpan.textContent = "Score: " + score;
     overlay.classList.remove("hidden");
+
+    if (isWin) {
+        gameWon = true;
+        drawFireworksLoop();
+    }
 }
 
 // --- Draw Functions ---
@@ -433,4 +448,67 @@ function createStars() {
 
         starContainer.appendChild(star);
     }
+}
+
+// --- Fireworks Logic ---
+let gameWon = false;
+let fireworks = [];
+
+function createFirework(x, y) {
+    const particleCount = 50;
+    const color = `hsl(${Math.random() * 360}, 100%, 50%)`;
+
+    for (let i = 0; i < particleCount; i++) {
+        fireworks.push({
+            x: x,
+            y: y,
+            vx: (Math.random() - 0.5) * 6,
+            vy: (Math.random() - 0.5) * 6,
+            alpha: 1,
+            color: color,
+            drag: 0.98, // Air resistance
+            gravity: 0.05
+        });
+    }
+}
+
+function drawFireworksLoop() {
+    if (!gameWon) return;
+
+    // Use clearRect to maintain transparency for background stars
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Spawn random fireworks
+    if (Math.random() < 0.05) {
+        createFirework(Math.random() * canvas.width, Math.random() * canvas.height * 0.6);
+    }
+
+    // Update and Draw
+    for (let i = fireworks.length - 1; i >= 0; i--) {
+        let p = fireworks[i];
+
+        // Physics
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vx *= p.drag;
+        p.vy *= p.drag;
+        p.vy += p.gravity;
+        p.alpha -= 0.01; // Fade out
+
+        // Draw
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = p.alpha;
+        ctx.fill();
+        ctx.closePath();
+
+        // Remove dead particles
+        if (p.alpha <= 0) {
+            fireworks.splice(i, 1);
+        }
+    }
+    ctx.globalAlpha = 1.0; // Reset alpha
+
+    requestAnimationFrame(drawFireworksLoop);
 }
