@@ -46,7 +46,7 @@ let powerUps = [];
 
 // Ball properties
 const ballRadius = 6;
-const initialSpeed = 2.5; // Slower speed as requested
+const initialSpeed = 2.0; // EVEN SLOWER (was 2.5, originally 4)
 
 function createBall(x, y, dx, dy) {
     return { x: x, y: y, dx: dx, dy: dy, history: [] }; // Add history array
@@ -115,13 +115,18 @@ document.addEventListener("touchstart", touchHandler, { passive: false });
 document.addEventListener("touchmove", touchHandler, { passive: false });
 
 function touchHandler(e) {
+    // Prevent default browser behavior (scrolling/refresh) unless touching a button
     if (e.target.tagName !== "BUTTON") {
         e.preventDefault();
     }
     const rect = canvas.getBoundingClientRect();
     const scaleX = canvas.width / rect.width;
-    let touchX = e.touches[0].clientX - rect.left;
-    touchX *= scaleX;
+
+    // Get clientX from the first touch
+    let clientX = e.touches[0].clientX;
+
+    // Convert to canvas space
+    let touchX = (clientX - rect.left) * scaleX;
 
     // Clamp touchX to be within canvas bounds
     if (touchX < 0) touchX = 0;

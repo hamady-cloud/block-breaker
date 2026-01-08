@@ -18,7 +18,8 @@ body {
     height: 100vh;
     flex-direction: column;
     color: white;
-    /* Text color adjustment for dark background */
+    touch-action: none;
+    /* Prevent default touch actions (scrolling, etc.) */
 }
 
 @keyframes gradientMove {
@@ -81,6 +82,8 @@ canvas {
     /* Stronger shadow */
     border: 2px solid rgba(255, 255, 255, 0.1);
     /* Subtle border */
+    touch-action: none;
+    /* Explicitly disable touch action on canvas too */
 }
 
 .canvas-wrapper {
@@ -115,8 +118,6 @@ canvas {
     opacity: 1;
     transition: opacity 0.3s ease;
 }
-
-/* ... existing overlay styles ... */
 
 button#restartButton {
     background-color: #0095DD;
@@ -169,17 +170,6 @@ button#restartButton {
     color: #666;
     font-size: 18px;
     margin-bottom: 20px;
-}
-
-button#restartButton {
-    background-color: #0095DD;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.2s;
 }
 
 button#restartButton:hover {
